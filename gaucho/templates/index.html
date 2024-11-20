@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Port scanning tool with a cybersecurity design flow">
+    <title>Port Scanner</title>
+    <link rel="stylesheet" href="{% static 'estilos.css' %}">
+</head>
+
+<body class="content">
+    <!-- Video de fondo -->
+    <video autoplay muted loop id="video-background">
+        <source src="{% static 'videoplayback4.mp4' %}" type="video/mp4">
+        Tu navegador no soporta videos.
+    </video>
+
+    <!-- Contenedor del logo y nombre -->
+    <header class="header">
+        <div class="logo-container">
+            <img src="{% static 'logo.png' %}" alt="Logo" class="logo">
+            <h2 class="brand-name">Gaucho Scan</h2>
+        </div>
+
+        <!-- Botón de menú hamburguesa -->
+        <nav>
+            <div class="menu-toggle" id="menuToggle">
+                <div class="bar" id="bar1"></div>
+                <div class="bar" id="bar2"></div>
+                <div class="bar" id="bar3"></div>
+            </div>
+
+            <!-- Menú desplegable -->
+            <ul class="menu" id="menu">
+                <li><a href="#">Inicio</a></li>
+                <li><a href="#">Escaneo</a></li>
+                <li><a href="#">Acerca de</a></li>
+                <li><a href="#">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Formulario de escaneo -->
+    <div class="form-container">
+        <h1 class="title">Escáner de Puertos</h1>
+        <form id="scanForm" action="{% url 'port_scan' %}" method="post">
+            {% csrf_token %}
+            <div class="input-container">
+                <label for="ip">Ingrese una dirección IP o URL</label>
+                <input type="text" id="ip" name="ip" placeholder="192.168.1.1 o ejemplo.com" required>
+                <div class="underline"></div>
+            </div>
+            <div class="input-container">
+                <label for="scan-type">Selecciona el tipo de escaneo</label>
+                <select id="scan-type" name="scan_type" required>
+                    <option value="tcp">Escaneo TCP</option>
+                    <option value="udp">Escaneo UDP</option>
+                    <option value="traceroute">Traceroute</option> <!-- Opción de traceroute -->
+                </select>
+                <div class="underline"></div>
+            </div>
+            <button type="submit" class="scan-btn">Iniciar</button>
+        </form>      
+
+        <!-- Aquí se mostrarán los resultados del escaneo con los globos de riesgo -->
+        <div id="results">
+            {% if results %}
+                <h2>Resultados del Escaneo</h2>
+                <div class="results-container">
+                    {{ results|safe }}  <!-- Renderiza los resultados con el HTML de los globos -->
+                </div>
+            {% else %}
+                <p>No se encontraron resultados.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="{% static 'script.js' %}"></script>
+</body>
+</html>
